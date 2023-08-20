@@ -1,0 +1,11 @@
+[
+    {
+        "id": 0,
+        "name": "tester",
+        "password": "tester",
+        "verified": true,
+        "jwtEpoch": 1,
+        "spaceUsedInMb": 0,
+        "spaceAvailableInMb": 10000
+    }
+]
