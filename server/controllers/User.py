@@ -5,7 +5,7 @@ import re
 from ..database.DbController import DbController
 
 
-from ..models.User import UserModel, UserInReqModel
+from ..models.User import UserModel, UserInReqModel, UserInResModel
 from ..models.AToken import ATokenModel
 
 from ..config import Cfg
@@ -84,9 +84,9 @@ class UserController:
 
 
   @staticmethod
-  def get_user(user_id: int) -> UserModel:
+  def get_user(user_id: int) -> UserInResModel:
 
     user = DbController.get_user(user_id)
 
-
+    
     return user

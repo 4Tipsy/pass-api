@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 from ..dependencies.auth import auth
 from ..controllers.User import UserController
 
-from ..models.User import UserModel, UserInReqModel
+from ..models.User import UserModel, UserInReqModel, UserInResModel
 
 
 
@@ -65,7 +65,7 @@ def handle_login(request: LoginReqModel, response: Response) -> ResponseModel:
 # GET USER
 class GetUserResModel(BaseModel):
   result: Literal['success']
-  user: UserModel
+  user: UserInResModel
 
 @router.get('/get-user')
 def handle_get_user(user_id=Depends(auth)) -> GetUserResModel:

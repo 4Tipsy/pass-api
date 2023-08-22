@@ -26,18 +26,19 @@ class FsEntityController:
   def _edit_parent_structure_json(action: Literal['add', 'del', 'rename'], fs_entity: FsEntityModel, path_to_parent, new_name=None) -> None:
     path_to_structure = os.path.join(path_to_parent, 'structure.json')
 
+
     # open
     with open(path_to_structure, 'r', encoding='utf8') as read_file:
       structure: list = json.load(read_file)
 
     # change
     if action == 'add':
-      structure.append(fs_entity)
+      structure.append(fs_entity.model_dump(exclude_none=True))
     if action == 'del':
-      structure = list(filter( lambda e: e['name'] != fs_entity['name'], structure ))
+      structure = list(filter( lambda e: e['name'] != fs_entity.name, structure ))
     if action == 'rename':
       for e in structure:
-        if e['name'] == fs_entity['name']:
+        if e['name'] == fs_entity.name:
           e['name'] = new_name
 
     # save
@@ -74,7 +75,7 @@ class FsEntityController:
     # checks
     if not re.match("[a-zA-z0-9\\\h.,()-_]", fs_entity.name):
       raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f'Unacceptable {fs_entity.type} name')
-    if os.path.exists(path_to_parent):
+    if os.path.exists(fs_entity.path):
       raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f'Such {fs_entity.type} already exist')
     
 
@@ -115,7 +116,7 @@ class FsEntityController:
 
 
     # checks
-    if not os.path.exists(path_to_parent):
+    if not os.path.exists(fs_entity.path):
       raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f'Such {fs_entity.type} does not exist')
     
 
@@ -152,7 +153,7 @@ class FsEntityController:
     # checks
     if not re.match("[a-zA-z0-9\\\h.,()-_]", fs_entity.name):
       raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f'Unacceptable {fs_entity.type} name')
-    if not os.path.exists(path_to_parent):
+    if not os.path.exists(fs_entity.path):
       raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f'Such {fs_entity.type} does not exist')    
 
 

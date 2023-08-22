@@ -9,9 +9,9 @@ import os
 
 
 
-from app.routes.fs import router as fs_router
-from app.routes.user import router as user_router
-from app.routes.utility import router as utility_router
+from server.routes.fs import router as fs_router
+from server.routes.user import router as user_router
+from server.routes.utility import router as utility_router
 
 
 
