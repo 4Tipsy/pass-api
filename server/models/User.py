@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field
 
 
 class UserModel(BaseModel):
+  """Model of user in pass system"""
   id: int # # not passed in request # # not passed in response
   name: str
   password: str # # not passed in response
@@ -15,6 +16,7 @@ class UserModel(BaseModel):
 
 
 class UserInReqModel(BaseModel):
+  """Only 'name' and 'password'"""
   name: str
   password: str
 
@@ -23,6 +25,7 @@ class UserInReqModel(BaseModel):
 
 # this one is returned to client
 class UserInResModel(UserModel):
+  """Only fields crucial for client"""
 
   id: int = Field(exclude=True)
   password: str = Field(exclude=True)

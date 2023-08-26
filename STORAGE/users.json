@@ -2,7 +2,7 @@
     {
         "id": 0,
         "name": "tester",
-        "password": "tester",
+        "password": "$2b$12$8I8sP2I2vbx9FS29s/DPJuaxMurey22GaUfsrD7v8Nph6RDokpdvO",
         "verified": true,
         "jwtEpoch": 1,
         "spaceUsedInMb": 0,

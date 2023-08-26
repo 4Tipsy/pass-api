@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import Literal
 
@@ -8,6 +9,7 @@ from typing import Literal
 router = APIRouter(prefix='/api/utility-service', tags=['Utility service'])
 
 class ResponseModel(BaseModel):
+  """Default response model"""
   result: Literal['success']
 
 
@@ -17,9 +19,24 @@ class ResponseModel(BaseModel):
 
 # CHECK SERVER STATUS
 
-@router.get('/get-server-status')
-def handle_get_server_status() -> ResponseModel:
+@router.head('/get-server-status')
+def handle_get_server_status() -> None:
   
-  return {
-    'result': 'success'
-  }
+  return
+
+
+
+
+
+# GET PASS CLI VERSION
+# in dev...
+
+
+
+
+
+# lol why not?
+
+@router.get('/uwu', include_in_schema=False)
+def get_uwu() -> None:
+  return FileResponse('./utils/uwu.png')

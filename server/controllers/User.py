@@ -4,6 +4,8 @@ import re
 
 from ..database.DbController import DbController
 
+from ..utils.hashing_password import HashingPassword
+
 
 from ..models.User import UserModel, UserInReqModel, UserInResModel
 from ..models.AToken import ATokenModel
@@ -24,18 +26,22 @@ class UserController:
 
   @staticmethod
   def create_user(new_user: UserInReqModel) -> None | HTTPException: # takes {name, password}
+    """Will add new user to DB, and create corresponding user folder"""
 
     # checks
     if not re.match("[a-zA-z0-9\\\h.,()-_]", new_user.name):
       raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f'Unacceptable username')
     if not re.match("[a-zA-z0-9\\\h.,()-_]", new_user.password):
       raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f'Unacceptable password')
+    
 
+    # get hashed password
+    hashed_password = HashingPassword.get_hashed_password(new_user.password)
 
     # creating new user
     new_user_obj = {}
     new_user_obj['name'] = new_user.name
-    new_user_obj['password'] = new_user.password
+    new_user_obj['password'] = hashed_password
     new_user_obj['verified'] = False
     new_user_obj['jwtEpoch'] = 1
     new_user_obj['spaceAvailableInMb'] = Cfg.DEFAULT_AVAILABLE_SPACE_IN_MB
@@ -58,15 +64,22 @@ class UserController:
 
   @staticmethod
   def get_auth_token(user_to_auth: UserInReqModel) -> ATokenModel | HTTPException:
+    """Will get user from DB by name, check password, and if ok return ready a_token"""
 
-    current_user:UserModel = DbController.get_user_by_name(user_to_auth.name)
+    current_user: UserModel = DbController.get_user_by_name(user_to_auth.name)
 
 
     # password check
-    if user_to_auth.password != current_user['password']:
+    if not HashingPassword.check_if_password_valid(user_to_auth.password, current_user['password']):
       raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Password or name is wrong")
     
-    payload = {'id': current_user['id'], 'epoch': current_user['jwtEpoch']}
+
+
+    payload = {
+        'id': current_user['id'],
+        'epoch': current_user['jwtEpoch']
+      }
+    
     a_token = jwt.encode(payload, Cfg.JWT_SECRET_KEY, algorithm="HS256")
 
 

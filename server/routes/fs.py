@@ -15,6 +15,7 @@ from ..models.FsEntity import FsEntityModel, FsEntityInReqModel
 router = APIRouter(prefix='/api/fs-service', tags=['File system service'])
 
 class ResponseModel(BaseModel):
+  """Default response model"""
   result: Literal['success']
 
 
@@ -26,7 +27,7 @@ class CreateNewFolderReqModel(BaseModel):
   fsEntity: FsEntityInReqModel
   fileField: Literal['mere', 'unmere', 'reserved']
 
-@router.post('/create-new-folder')
+@router.post('/create-new-folder', description='**(auth needed)**')
 def handle_create_new_folder(request: CreateNewFolderReqModel, user_id=Depends(auth)) -> ResponseModel:
 
   
@@ -45,7 +46,7 @@ class UploadNewFileReqModel(BaseModel):
   fileField: Literal['mere', 'unmere', 'reserved']
   file: UploadFile
 
-@router.post('/upload-new-file')
+@router.post('/upload-new-file', description='**(auth needed)**')
 def handle_upload_new_file(request: UploadNewFileReqModel, user_id=Depends(auth)) -> ResponseModel:
   
 
@@ -62,7 +63,7 @@ class RenameEntityReqModel(BaseModel):
   fileField: Literal['mere', 'unmere', 'reserved']
   newName: str
 
-@router.post('/rename-entity')
+@router.post('/rename-entity', description='**(auth needed)**')
 def handle_rename_entity(request: RenameEntityReqModel, user_id=Depends(auth)) -> ResponseModel:
   
 
@@ -80,7 +81,7 @@ class DeleteEntityReqModel(BaseModel):
   fileField: Literal['mere', 'unmere', 'reserved']
   newName: str
 
-@router.post('/delete-entity')
+@router.post('/delete-entity', description='**(auth needed)**')
 def handle_delete_entity(request: DeleteEntityReqModel, user_id=Depends(auth)) -> ResponseModel:
   
 
@@ -101,7 +102,7 @@ class GetFsLayerResModel(BaseModel):
   result: Literal['success']
   fsLayer: list[FsEntityModel]
 
-@router.post('/get-fs-layer')
+@router.post('/get-fs-layer', description='**(auth needed)**')
 def handle_get_fs_layer(request: GetFsLayerReqModel, user_id=Depends(auth)) -> GetFsLayerResModel:
   
 

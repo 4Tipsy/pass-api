@@ -17,6 +17,7 @@ from ..models.User import UserModel, UserInReqModel, UserInResModel
 router = APIRouter(prefix='/api/user-service', tags=['User service'])
 
 class ResponseModel(BaseModel):
+  """Default response model"""
   result: Literal['success']
 
 
@@ -67,7 +68,7 @@ class GetUserResModel(BaseModel):
   result: Literal['success']
   user: UserInResModel
 
-@router.get('/get-user')
+@router.get('/get-user', description='**(auth needed)**')
 def handle_get_user(user_id=Depends(auth)) -> GetUserResModel:
   
 

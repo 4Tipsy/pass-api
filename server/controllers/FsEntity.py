@@ -13,6 +13,8 @@ class FsEntityController:
 
   @staticmethod
   def _get_path_to_entity_parent(user_folder, file_field, entity_path) -> str:
+    """Will construct full path to entity from given parts, then will get path to entity's parent"""
+
     # -> STORAGE/user_folder/file_field/*/
     path_ = os.path.join('../STORAGE', user_folder, file_field.upper(), entity_path)
     return os.path.dirname(path_)
@@ -24,6 +26,8 @@ class FsEntityController:
 
   @staticmethod
   def _edit_parent_structure_json(action: Literal['add', 'del', 'rename'], fs_entity: FsEntityModel, path_to_parent, new_name=None) -> None:
+    """Record changes to corresponding structure.json file"""
+
     path_to_structure = os.path.join(path_to_parent, 'structure.json')
 
 
@@ -177,6 +181,7 @@ class FsEntityController:
 
   @staticmethod
   def get_fs_layer(path_to_layer: str, file_field: Literal['mere', 'unmere', 'reserved'], user_id: int) -> list | HTTPException:
+    """Return UNSORTED array with info about every file/folder stored in {path_to_layer} folder"""
 
     # init vars
     user_folder = f"UF__{user_id}"
@@ -211,6 +216,7 @@ class FsEntityController:
 
   @staticmethod
   def create_new_user_folder(user_id: int) -> None:
+    """Creates user folder ( 'UF__{user_id}' ) with file_field's in STORAGE"""
 
     # init vars
     user_folder = f"UF__{user_id}"

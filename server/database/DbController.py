@@ -7,6 +7,7 @@ import json
 
 
 class DbController:
+  """It is not database actually, i used json for now"""
 
 
   
@@ -21,6 +22,7 @@ class DbController:
 
   @staticmethod
   def get_user(user_id: int) -> UserModel:
+    """Get user by id"""
 
     # get users
     with open(DbController._path_to_users_json, 'r', encoding='utf8') as read_file:
@@ -38,6 +40,7 @@ class DbController:
 
   @staticmethod
   def get_user_by_name(name: str) -> UserModel:
+    """Get user by name"""
 
     # get users
     with open(DbController._path_to_users_json, 'r', encoding='utf8') as read_file:
@@ -56,6 +59,7 @@ class DbController:
 
   @staticmethod
   def add_user(new_user: UserModel) -> int:
+    """Will add new user to 'DB', and return new user's id"""
 
     # open
     with open(DbController._path_to_users_json, 'r', encoding='utf8') as read_file:
