@@ -98,6 +98,7 @@ class UserController:
 
   @staticmethod
   def get_user(user_id: int) -> UserInResModel:
+    """Just get full user obj from DB by id"""
 
     user = DbController.get_user(user_id)
 

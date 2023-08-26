@@ -38,7 +38,7 @@ def handle_create_new_folder(request: CreateNewFolderReqModel, user_id=Depends(a
 
 
 
-
+FsEntityModel
 
 # NEW FILE
 class UploadNewFileReqModel(BaseModel):

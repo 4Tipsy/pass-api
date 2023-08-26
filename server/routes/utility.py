@@ -19,7 +19,7 @@ class ResponseModel(BaseModel):
 
 # CHECK SERVER STATUS
 
-@router.head('/get-server-status')
+@router.head('/get-server-status', response_model=None)
 def handle_get_server_status() -> None:
   
   return
@@ -29,7 +29,7 @@ def handle_get_server_status() -> None:
 
 
 # GET PASS CLI VERSION
-# in dev...
+# in dev... cli in dev...
 
 
 
