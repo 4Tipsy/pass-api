@@ -4,13 +4,18 @@ from typing import Optional, Literal
 
 
 
+
+
+
+
+
 class FsEntityModel(BaseModel):
   """Model of file or folder in pass \"file-system\""""
 
   name: str
   path: str # ./folder1/folder2/name
   type: Literal['file', 'folder']
-  fileType: Literal['img', 'txt', 'other'] # # not passed in request
+  mimeType: Optional[str] = None # # not passed in request
   sizeInMB: float # # not passed in request
 
 
@@ -22,5 +27,5 @@ class FsEntityInReqModel(BaseModel):
   name: str
   path: str # ./folder1/folder2/name
   type: Literal['file', 'folder']
-  # fileType: None
+  # mimeType: None
   # sizeInMB: None

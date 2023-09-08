@@ -71,7 +71,7 @@ class FsEntityController:
 
     # additional vars for files
     if fs_entity.type == 'file':
-      fs_entity.fileType = file.content_type.split('/')[0]
+      fs_entity.mimeType = file.content_type
       fs_entity.sizeInMB = file.size / 1024 / 1024
 
 

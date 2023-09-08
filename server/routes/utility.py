@@ -3,6 +3,8 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import Literal
 
+from ..config import Cfg
+
 
 
 
@@ -18,17 +20,20 @@ class ResponseModel(BaseModel):
 
 
 # CHECK SERVER STATUS
+class ResponseModel(BaseModel):
+  result: Literal['success']
+  apiVersion: str
 
-@router.head('/get-server-status', response_model=None)
-def handle_get_server_status() -> None:
+@router.get('/get-api-version')
+def handle_get_api_version() -> ResponseModel:
   
-  return
+  return {
+    'result': 'success',
+    'apiVersion': f'PASS API {Cfg.API_VERSION}'
+    }
 
 
 
-
-
-# GET PASS CLI VERSION
 # in dev... cli in dev...
 
 

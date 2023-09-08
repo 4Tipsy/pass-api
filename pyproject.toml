@@ -8,7 +8,7 @@ packages = [{include = "pass_server"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-fastapi = "^0.101.0"
+fastapi = "0.101.0"
 uvicorn = "^0.23.2"
 pydantic = "^2.1.1"
 python-dotenv = "^1.0.0"

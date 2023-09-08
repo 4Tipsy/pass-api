@@ -17,6 +17,8 @@ class Cfg:
 
   DEFAULT_AVAILABLE_SPACE_IN_MB: str = os.environ.get('DEFAULT_AVAILABLE_SPACE_IN_MB')
 
+  API_VERSION: str = os.environ.get('API_VERSION')
+
 
 
 

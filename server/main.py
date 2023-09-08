@@ -8,7 +8,7 @@ from typing import Literal
 import os
 
 # desc
-from server.config import Desc
+from server.config import Cfg, Desc
 
 # modules
 from server.routes.fs import router as fs_router
@@ -31,7 +31,7 @@ class OnErrorResModel(BaseModel):
 os.chdir(os.path.dirname(__file__)) # cwd = ./server
 app = FastAPI(
   title='PASS API documentation',
-  version='API 1.0',
+  version=f'API {Cfg.API_VERSION}',
   description=Desc.MAIN_APP_DESC,
 
   docs_url='/api/docs',
