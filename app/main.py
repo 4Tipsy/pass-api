@@ -8,12 +8,12 @@ from typing import Literal
 import os
 
 # desc
-from server.config import Cfg, Desc
+from app.config import Cfg, Desc
 
 # modules
-from server.routes.fs import router as fs_router
-from server.routes.user import router as user_router
-from server.routes.utility import router as utility_router
+from app.routes.fs import router as fs_router
+from app.routes.user import router as user_router
+from app.routes.utility import router as utility_router
 
 
 
@@ -28,7 +28,7 @@ class OnErrorResModel(BaseModel):
 
 
 # app init
-os.chdir(os.path.dirname(__file__)) # cwd = ./server
+os.chdir(os.path.dirname(__file__)) # cwd = ./app
 app = FastAPI(
   title='PASS API documentation',
   version=f'API {Cfg.API_VERSION}',

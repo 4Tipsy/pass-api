@@ -25,7 +25,7 @@ class Cfg:
 
 
 
-# DESCRIPTIONS FOR DOC
+# DESCRIPTIONS FOR DOCS
 class Desc:
   """Descriptions for auto docs"""
 
