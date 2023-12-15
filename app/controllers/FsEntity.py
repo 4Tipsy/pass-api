@@ -218,8 +218,11 @@ class FsEntityController:
   def get_fs_layer(path_to_layer: str, file_field: Literal['mere', 'unmere', 'reserved'], user_id: int) -> list | HTTPException:
     """Return UNSORTED array with info about every file/folder stored in {path_to_layer} folder"""
 
+    # init vars 1
+    path_to_parent = FsEntityController._get_path_to_entity_parent(user_folder, file_field, _entity_path) # from STORAGE/ to folder_where_stored/
 
-    #checks
+
+    # checks
     if not os.path.exists(path_to_parent):
       raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f'Such path does not exist') 
     if not os.path.isabs(path_to_layer):
@@ -227,10 +230,10 @@ class FsEntityController:
     
 
 
-    # init vars
+    # init vars 2
     user_folder = f"UF__{user_id}"
     _entity_path = os.path.join(path_to_layer, '<layer>') # cuz last element in path will be removed # crunch
-    path_to_parent = FsEntityController._get_path_to_entity_parent(user_folder, file_field, _entity_path) # from STORAGE/ to folder_where_stored/
+    
 
 
 
