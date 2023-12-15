@@ -80,9 +80,14 @@ class FsEntityController:
   @staticmethod
   def create_entity(fs_entity: FsEntityModel, file_field: Literal['mere', 'unmere', 'reserved'], user_id: int, file: Optional[UploadFile]=None) -> None | HTTPException:
 
-    # init vars 1
+
+    # init vars
+    user_folder = f"UF__{user_id}"
     path_to_parent = FsEntityController._get_path_to_entity_parent(user_folder, file_field, _relative_full_path) # from STORAGE/ to folder_where_stored/
+    _relative_full_path = FsEntityController._get_relative_path_from_abs(fs_entity.absPathToEntity)
     
+
+
     # checks
     if not re.match("[a-zA-z0-9\\\h.,()-_]", fs_entity.name):
       raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f'Unacceptable {fs_entity.type} name')
@@ -90,13 +95,6 @@ class FsEntityController:
       raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f'Such {fs_entity.type} already exist')
     if not os.path.isabs(fs_entity.absPathToEntity):
       raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f'Path "{fs_entity.absPathToEntity}" is not absolute, while it should be')
-
-
-
-    # init vars 2
-    user_folder = f"UF__{user_id}"
-    _relative_full_path = FsEntityController._get_relative_path_from_abs(fs_entity.absPathToEntity)
-    
 
 
 
@@ -137,8 +135,13 @@ class FsEntityController:
   @staticmethod
   def delete_entity(fs_entity: FsEntityModel, file_field: Literal['mere', 'unmere', 'reserved'], user_id: int) -> None | HTTPException:
    
-    # init vars 1
+
+    # init vars
+    user_folder = f"UF__{user_id}"
     path_to_parent = FsEntityController._get_path_to_entity_parent(user_folder, file_field, _relative_full_path) # from STORAGE/ to folder_where_stored/
+    _relative_full_path = FsEntityController._get_relative_path_from_abs(fs_entity.absPathToEntity)
+
+
 
     # checks
     if not os.path.exists( os.path.join(path_to_parent, fs_entity.name) ):
@@ -146,12 +149,6 @@ class FsEntityController:
     if not os.path.isabs(fs_entity.absPathToEntity):
       raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f'Path "{fs_entity.absPathToEntity}" is not absolute, while it should be')
     
-
-
-    # init vars 2
-    user_folder = f"UF__{user_id}"
-    _relative_full_path = FsEntityController._get_relative_path_from_abs(fs_entity.absPathToEntity)
-
 
 
     # delete
@@ -178,8 +175,12 @@ class FsEntityController:
   @staticmethod
   def rename_entity(fs_entity: FsEntityModel, file_field: Literal['mere', 'unmere', 'reserved'], user_id: int, new_name: str) -> None | HTTPException:
 
-    # init vars 1
+    # init vars
+    user_folder = f"UF__{user_id}"
     path_to_parent = FsEntityController._get_path_to_entity_parent(user_folder, file_field, _relative_full_path) # from STORAGE/ to folder_where_stored/
+    _relative_full_path = FsEntityController._get_relative_path_from_abs(fs_entity.absPathToEntity)
+
+
 
     # checks
     if not re.match("[a-zA-z0-9\\\h.,()-_]", fs_entity.name):
@@ -188,12 +189,6 @@ class FsEntityController:
       raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f'Such {fs_entity.type} does not exist')  
     if not os.path.isabs(fs_entity.absPathToEntity):
       raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f'Path "{fs_entity.absPathToEntity}" is not absolute, while it should be')  
-
-
-
-    # init vars 2
-    user_folder = f"UF__{user_id}"
-    _relative_full_path = FsEntityController._get_relative_path_from_abs(fs_entity.absPathToEntity)
 
 
 
@@ -218,8 +213,12 @@ class FsEntityController:
   def get_fs_layer(path_to_layer: str, file_field: Literal['mere', 'unmere', 'reserved'], user_id: int) -> list | HTTPException:
     """Return UNSORTED array with info about every file/folder stored in {path_to_layer} folder"""
 
-    # init vars 1
+
+    # init vars
+    user_folder = f"UF__{user_id}"
     path_to_parent = FsEntityController._get_path_to_entity_parent(user_folder, file_field, _entity_path) # from STORAGE/ to folder_where_stored/
+    _entity_path = os.path.join(path_to_layer, '<layer>') # cuz last element in path will be removed # crunch
+
 
 
     # checks
@@ -227,13 +226,6 @@ class FsEntityController:
       raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f'Such path does not exist') 
     if not os.path.isabs(path_to_layer):
       raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f'Path "{path_to_layer}" is not absolute, while it should be')
-    
-
-
-    # init vars 2
-    user_folder = f"UF__{user_id}"
-    _entity_path = os.path.join(path_to_layer, '<layer>') # cuz last element in path will be removed # crunch
-    
 
 
 
