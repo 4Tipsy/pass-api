@@ -83,8 +83,9 @@ class FsEntityController:
 
     # init vars
     user_folder = f"UF__{user_id}"
-    path_to_parent = FsEntityController._get_path_to_entity_parent(user_folder, file_field, _relative_full_path) # from STORAGE/ to folder_where_stored/
     _relative_full_path = FsEntityController._get_relative_path_from_abs(fs_entity.absPathToEntity)
+    path_to_parent = FsEntityController._get_path_to_entity_parent(user_folder, file_field, _relative_full_path) # from STORAGE/ to folder_where_stored/
+
     
 
 
@@ -138,9 +139,9 @@ class FsEntityController:
 
     # init vars
     user_folder = f"UF__{user_id}"
-    path_to_parent = FsEntityController._get_path_to_entity_parent(user_folder, file_field, _relative_full_path) # from STORAGE/ to folder_where_stored/
     _relative_full_path = FsEntityController._get_relative_path_from_abs(fs_entity.absPathToEntity)
-
+    path_to_parent = FsEntityController._get_path_to_entity_parent(user_folder, file_field, _relative_full_path) # from STORAGE/ to folder_where_stored/
+    
 
 
     # checks
@@ -177,8 +178,9 @@ class FsEntityController:
 
     # init vars
     user_folder = f"UF__{user_id}"
-    path_to_parent = FsEntityController._get_path_to_entity_parent(user_folder, file_field, _relative_full_path) # from STORAGE/ to folder_where_stored/
     _relative_full_path = FsEntityController._get_relative_path_from_abs(fs_entity.absPathToEntity)
+    path_to_parent = FsEntityController._get_path_to_entity_parent(user_folder, file_field, _relative_full_path) # from STORAGE/ to folder_where_stored/
+
 
 
 
