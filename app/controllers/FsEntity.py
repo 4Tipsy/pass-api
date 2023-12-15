@@ -80,6 +80,8 @@ class FsEntityController:
   @staticmethod
   def create_entity(fs_entity: FsEntityModel, file_field: Literal['mere', 'unmere', 'reserved'], user_id: int, file: Optional[UploadFile]=None) -> None | HTTPException:
 
+    # init vars 1
+    path_to_parent = FsEntityController._get_path_to_entity_parent(user_folder, file_field, _relative_full_path) # from STORAGE/ to folder_where_stored/
     
     # checks
     if not re.match("[a-zA-z0-9\\\h.,()-_]", fs_entity.name):
@@ -91,10 +93,10 @@ class FsEntityController:
 
 
 
-    # init vars
+    # init vars 2
     user_folder = f"UF__{user_id}"
     _relative_full_path = FsEntityController._get_relative_path_from_abs(fs_entity.absPathToEntity)
-    path_to_parent = FsEntityController._get_path_to_entity_parent(user_folder, file_field, _relative_full_path) # from STORAGE/ to folder_where_stored/
+    
 
 
 
@@ -135,6 +137,8 @@ class FsEntityController:
   @staticmethod
   def delete_entity(fs_entity: FsEntityModel, file_field: Literal['mere', 'unmere', 'reserved'], user_id: int) -> None | HTTPException:
    
+    # init vars 1
+    path_to_parent = FsEntityController._get_path_to_entity_parent(user_folder, file_field, _relative_full_path) # from STORAGE/ to folder_where_stored/
 
     # checks
     if not os.path.exists( os.path.join(path_to_parent, fs_entity.name) ):
@@ -144,10 +148,9 @@ class FsEntityController:
     
 
 
-    # init vars
+    # init vars 2
     user_folder = f"UF__{user_id}"
     _relative_full_path = FsEntityController._get_relative_path_from_abs(fs_entity.absPathToEntity)
-    path_to_parent = FsEntityController._get_path_to_entity_parent(user_folder, file_field, _relative_full_path) # from STORAGE/ to folder_where_stored/
 
 
 
@@ -175,6 +178,8 @@ class FsEntityController:
   @staticmethod
   def rename_entity(fs_entity: FsEntityModel, file_field: Literal['mere', 'unmere', 'reserved'], user_id: int, new_name: str) -> None | HTTPException:
 
+    # init vars 1
+    path_to_parent = FsEntityController._get_path_to_entity_parent(user_folder, file_field, _relative_full_path) # from STORAGE/ to folder_where_stored/
 
     # checks
     if not re.match("[a-zA-z0-9\\\h.,()-_]", fs_entity.name):
@@ -186,10 +191,9 @@ class FsEntityController:
 
 
 
-    # init vars
+    # init vars 2
     user_folder = f"UF__{user_id}"
     _relative_full_path = FsEntityController._get_relative_path_from_abs(fs_entity.absPathToEntity)
-    path_to_parent = FsEntityController._get_path_to_entity_parent(user_folder, file_field, _relative_full_path) # from STORAGE/ to folder_where_stored/
 
 
 
