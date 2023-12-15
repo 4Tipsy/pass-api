@@ -13,10 +13,10 @@ class FsEntityModel(BaseModel):
   """Model of file or folder in pass \"file-system\""""
 
   name: str
-  path: str # ./folder1/folder2/name
+  absPathToEntity: str # /folder1/folder2/name
   type: Literal['file', 'folder']
   mimeType: Optional[str] = None # # not passed in request
-  sizeInMB: float # # not passed in request
+  sizeInMB: Optional[float] = None # # not passed in request
 
 
 
@@ -25,7 +25,7 @@ class FsEntityInReqModel(BaseModel):
   # for some reason `Field(exclude=True)` doesn't work here...
 
   name: str
-  path: str # ./folder1/folder2/name
+  absPathToEntity: str # /folder1/folder2/name
   type: Literal['file', 'folder']
   # mimeType: None
   # sizeInMB: None

@@ -11,14 +11,31 @@ class FsEntityController:
   
 
 
+
+
   @staticmethod
-  def _get_path_to_entity_parent(user_folder, file_field, entity_path) -> str:
+  def _get_relative_path_from_abs(given_path) -> str:
+    """Will construct appropriate path to use from abs one"""
+
+    # remove all '/' from path
+    while given_path[0] == '/':
+      given_path = given_path[1:]
+      if len(given_path) == 0:
+        break
+
+    return given_path
+
+
+
+
+
+  @staticmethod
+  def _get_path_to_entity_parent(user_folder, file_field, full_path_to_entity) -> str:
     """Will construct full path to entity from given parts, then will get path to entity's parent"""
 
     # -> STORAGE/user_folder/file_field/*/
-    path_ = os.path.join('../STORAGE', user_folder, file_field.upper(), entity_path)
+    path_ = os.path.join('../STORAGE', user_folder, file_field.upper(), full_path_to_entity)
     return os.path.dirname(path_)
-
 
 
 
@@ -65,7 +82,8 @@ class FsEntityController:
 
     # init vars
     user_folder = f"UF__{user_id}"
-    path_to_parent = FsEntityController._get_path_to_entity_parent(user_folder, file_field, fs_entity.path) # from STORAGE/ to folder_where_stored/
+    _relative_full_path = FsEntityController._get_relative_path_from_abs(fs_entity.absPathToEntity)
+    path_to_parent = FsEntityController._get_path_to_entity_parent(user_folder, file_field, _relative_full_path) # from STORAGE/ to folder_where_stored/
 
 
 
@@ -79,23 +97,25 @@ class FsEntityController:
     # checks
     if not re.match("[a-zA-z0-9\\\h.,()-_]", fs_entity.name):
       raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f'Unacceptable {fs_entity.type} name')
-    if os.path.exists(fs_entity.path):
+    if os.path.exists( os.path.join(path_to_parent, fs_entity.name) ):
       raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f'Such {fs_entity.type} already exist')
+    if not os.path.isabs(fs_entity.absPathToEntity):
+      raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f'Path "{fs_entity.absPathToEntity}" is not absolute, while it should be')
     
 
 
     # create
-    full_path = os.path.join(path_to_parent, fs_entity.name)
+    full_complete_path_to_entity = os.path.join(path_to_parent, fs_entity.name)
 
     if fs_entity.type == 'folder':
-      os.mkdir(full_path)
+      os.mkdir(full_complete_path_to_entity)
       # creating structure.json
-      with open( os.path.join(full_path, 'structure.json'), 'w', encoding='utf8') as new_file:
+      with open( os.path.join(full_complete_path_to_entity, 'structure.json'), 'w', encoding='utf8') as new_file:
         json.dump([], new_file)
 
     
     if fs_entity.type == 'file':
-      with open(full_path, 'wb') as new_file:
+      with open(full_complete_path_to_entity, 'wb') as new_file:
         while chunk := file.file.read(1024 * 1024):
           new_file.write(chunk)
 
@@ -116,23 +136,24 @@ class FsEntityController:
    
     # init vars
     user_folder = f"UF__{user_id}"
-    path_to_parent = FsEntityController._get_path_to_entity_parent(user_folder, file_field, fs_entity.path) # from STORAGE/ to folder_where_stored/
+    _relative_full_path = FsEntityController._get_relative_path_from_abs(fs_entity.absPathToEntity)
+    path_to_parent = FsEntityController._get_path_to_entity_parent(user_folder, file_field, _relative_full_path) # from STORAGE/ to folder_where_stored/
 
 
     # checks
-    if not os.path.exists(fs_entity.path):
+    if not os.path.exists( os.path.join(path_to_parent, fs_entity.name) ):
       raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f'Such {fs_entity.type} does not exist')
     
 
 
     # delete
-    full_path = os.path.join(path_to_parent, fs_entity.name)
+    full_complete_path_to_entity = os.path.join(path_to_parent, fs_entity.name)
 
     if fs_entity.type == 'folder':
-      shutil.rmtree(full_path)
+      shutil.rmtree(full_complete_path_to_entity)
 
     if fs_entity.type == 'file':
-      os.remove(full_path)
+      os.remove(full_complete_path_to_entity)
 
 
     # edit structure
@@ -151,20 +172,21 @@ class FsEntityController:
 
     # init vars
     user_folder = f"UF__{user_id}"
-    path_to_parent = FsEntityController._get_path_to_entity_parent(user_folder, file_field, fs_entity.path) # from STORAGE/ to folder_where_stored/
+    _relative_full_path = FsEntityController._get_relative_path_from_abs(fs_entity.absPathToEntity)
+    path_to_parent = FsEntityController._get_path_to_entity_parent(user_folder, file_field, _relative_full_path) # from STORAGE/ to folder_where_stored/
 
 
     # checks
     if not re.match("[a-zA-z0-9\\\h.,()-_]", fs_entity.name):
       raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f'Unacceptable {fs_entity.type} name')
-    if not os.path.exists(fs_entity.path):
+    if not os.path.exists( os.path.join(path_to_parent, fs_entity.name) ):
       raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f'Such {fs_entity.type} does not exist')    
 
 
 
     # rename
-    old_path  = os.path.join(path_to_parent, fs_entity.name)
-    new_path  = os.path.join(path_to_parent, new_name)
+    old_path = os.path.join(path_to_parent, fs_entity.name)
+    new_path = os.path.join(path_to_parent, new_name)
     os.rename(old_path, new_path)
 
 
@@ -185,7 +207,7 @@ class FsEntityController:
 
     # init vars
     user_folder = f"UF__{user_id}"
-    _entity_path = os.path.join(path_to_layer, '[layer]') # cuz last element in path will be removed # crunch
+    _entity_path = os.path.join(path_to_layer, '<layer>') # cuz last element in path will be removed # crunch
     path_to_parent = FsEntityController._get_path_to_entity_parent(user_folder, file_field, _entity_path) # from STORAGE/ to folder_where_stored/
 
 
