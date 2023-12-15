@@ -216,8 +216,9 @@ class FsEntityController:
 
     # init vars
     user_folder = f"UF__{user_id}"
-    path_to_parent = FsEntityController._get_path_to_entity_parent(user_folder, file_field, _entity_path) # from STORAGE/ to folder_where_stored/
     _entity_path = os.path.join(path_to_layer, '<layer>') # cuz last element in path will be removed # crunch
+    path_to_parent = FsEntityController._get_path_to_entity_parent(user_folder, file_field, _entity_path) # from STORAGE/ to folder_where_stored/
+    
 
 
 
